@@ -1,6 +1,4 @@
-// ===============================
-// 🟢 Select Elements
-// ===============================
+// Select elements
 const fromText = document.querySelector(".form-text");
 const toText = document.querySelector(".to-text");
 const selectTag = document.querySelectorAll("select");
@@ -8,28 +6,24 @@ const exchangeIcon = document.querySelector(".exchange");
 const translateBtn = document.querySelector(".translate-btn");
 const icons = document.querySelectorAll(".icons i");
 
-// ===============================
-// 🟢 Populate Languages from countries.js
-// ===============================
+// Populate language options from countries.js
 selectTag.forEach((tag, id) => {
   for (const code in countries) {
-    // 🟢 Default: From = Urdu, To = English
+    // Default: from = Hindi, to = English
     let selected =
       id === 0
-        ? code === "ur-PK"
+        ? code === "hi-IN"
           ? "selected"
           : ""
         : code === "en-US"
         ? "selected"
         : "";
-    let option = `<option value='${code}' ${selected}>${countries[code].name} ${countries[code].flag}</option>`;
+    let option = `<option value='${code}' ${selected}>${countries[code]}</option>`;
     tag.insertAdjacentHTML("beforeend", option);
   }
 });
 
-// ===============================
-// 🟢 Exchange Text & Language
-// ===============================
+// Exchange text and selected languages
 exchangeIcon.addEventListener("click", () => {
   let tempText = fromText.value;
   let tempLang = selectTag[0].value;
@@ -39,9 +33,7 @@ exchangeIcon.addEventListener("click", () => {
   selectTag[1].value = tempLang;
 });
 
-// ===============================
-// 🟢 Translate Text using API
-// ===============================
+// Translate text using MyMemory API
 translateBtn.addEventListener("click", () => {
   let text = fromText.value.trim();
   let translateFrom = selectTag[0].value;
@@ -51,7 +43,6 @@ translateBtn.addEventListener("click", () => {
 
   toText.setAttribute("placeholder", "Translating...");
 
-  // ✅ Free MyMemory API
   let apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
     text
   )}&langpair=${translateFrom}|${translateTo}`;
@@ -67,14 +58,12 @@ translateBtn.addEventListener("click", () => {
     });
 });
 
-// ===============================
-// 🟢 Handle Copy & Voice Buttons
-// ===============================
+// Copy and voice functionality
 icons.forEach((icon) => {
   icon.addEventListener("click", ({ target }) => {
     if (!fromText.value && !toText.value) return;
 
-    // 🎙️ Voice Button
+    // Voice button
     if (target.classList.contains("fa-volume-up")) {
       let utterance;
       if (target.closest(".row").classList.contains("from")) {
@@ -87,7 +76,7 @@ icons.forEach((icon) => {
       speechSynthesis.speak(utterance);
     }
 
-    // 📋 Copy Button
+    // Copy button
     else if (target.classList.contains("fa-copy")) {
       if (target.closest(".row").classList.contains("from")) {
         navigator.clipboard.writeText(fromText.value);
